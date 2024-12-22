@@ -40,24 +40,24 @@ BookTracker 是一個現代化的個人書籍管理系統，提供直覺的使�
 ## 執行指引
 **安裝後端依賴**
 
-bashCopycd backend
+cd backend
 npm install
 
 **設定後端環境變數**
 建立 .env 文件：
 
-envCopyMONGODB_URI=mongodb://localhost:27017/bookmanagement
+env MONGODB_URI=mongodb://localhost:27017/bookmanagement
 PORT=5001
 
 **啟動後端服務**
 
-bashCopynpm start
+npm start
 
 **安裝前端依賴**
 
-bashCopycd frontend
+cd frontend
 npm install
 
 **啟動前端開發服務器**
 
-bashCopynpm run dev
+npm run dev
