@@ -12,6 +12,20 @@ router.get('/books', async (req, res) => {
   }
 });
 
+// 獲取單一書籍
+router.get('/books/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (book) {
+      res.json(book);
+    } else {
+      res.status(404).json({ message: '找不到該書籍' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // 新增書籍
 router.post('/books', async (req, res) => {
   const book = new Book({
@@ -47,7 +61,7 @@ router.put('/books/:id', async (req, res) => {
 router.delete('/books/:id', async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id);
-    res.json({ message: '書籍已刪除' });
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

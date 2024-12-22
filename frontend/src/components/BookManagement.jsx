@@ -5,6 +5,7 @@ const BookManagement = () => {
   const [books, setBooks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentBook, setCurrentBook] = useState(null);
+  const [searchId, setSearchId] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -60,6 +61,20 @@ const BookManagement = () => {
     }
   };
 
+  const fetchSingleBook = async () => {
+    if (!searchId) return;
+    try {
+      const response = await fetch('http://localhost:5001/api/books');
+      const data = await response.json();
+      const filteredBooks = data.filter(book => 
+        book.title.toLowerCase().includes(searchId.toLowerCase())
+      );
+      setBooks(filteredBooks);
+    } catch (error) {
+      console.error('Error fetching book:', error);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: '',
@@ -73,14 +88,38 @@ const BookManagement = () => {
 
   return (
     <div className="min-h-screen bg-[#e8f4f2] p-8">
-  <div className="w-full">
-        <div className="flex flex-col md:flex-row gap-8">
+  <div className="w-full min-h-screen">  {/* 加入 min-h-screen */}
+    <div className="flex gap-8">        {/* 移除 flex-col md:flex-row */}
           {/* 左側面板 */}
-          <div className="md:w-2/6">
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+          <div className="w-1/3 h-fit">  {/* 改寬度為 1/3，高度自適應 */}
+  <div className="bg-white p-6 rounded-xl shadow-lg">
               <h1 className="text-2xl font-bold mb-6">私人書籍管理系統</h1>
+
+              {/* 修改了 placeholder */}
+              <div className="mb-6 flex gap-2">
+                <input
+                  type="text"
+                  placeholder="輸入書名查詢"
+                  value={searchId}
+                  onChange={(e) => setSearchId(e.target.value)}
+                  className="flex-1 p-2 border border-gray-300 rounded-lg"
+                />
+                <button
+                  onClick={fetchSingleBook}
+                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  查詢
+                </button>
+                <button
+                  onClick={fetchBooks}
+                  className="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                >
+                  全部
+                </button>
+              </div>
               
               <form onSubmit={handleSubmit} className="space-y-6">
+                
                 <div>
                   <input
                     type="text"
@@ -137,9 +176,9 @@ const BookManagement = () => {
             </div>
           </div>
 
-          {/* 右側列表 */}
-          <div className="md:w-2/3">
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+         
+          <div className="w-2/3">  
+  <div className="bg-white p-6 rounded-xl shadow-lg">
               <h2 className="text-2xl font-bold mb-6">所有書籍</h2>
               <div className="space-y-6">
                 {books.map((book) => (
